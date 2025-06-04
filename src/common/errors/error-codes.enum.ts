@@ -1,0 +1,14 @@
+export enum ErrorCode {
+  USER_NOT_FOUND = 'USER_NOT_FOUND',
+  INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
+  EMAIL_ALREADY_EXISTS = 'EMAIL_ALREADY_EXISTS',
+  ACCESS_DENIED = 'ACCESS_DENIED',
+  INTERNAL_ERROR = 'INTERNAL_ERROR',
+  VALIDATION_ERROR = 'VALIDATION_ERROR',
+  // Add more as needed
+}
+
+export enum ErrorMessage {
+  USER_NOT_FOUND = 'User not found',
+  EMAIL_ALREADY_EXISTS = 'Email already exists',
+}
