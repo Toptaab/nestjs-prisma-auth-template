@@ -22,10 +22,20 @@ async function bootstrap() {
   // ตั้งค่า prefix เช่น '/api/v1'
   app.setGlobalPrefix(globalPrefix);
 
-  app.enableCors({
-    origin: `http://localhost:${port}`, // 👈 your Swagger UI origin
-    credentials: true, // 👈 this allows cookies
-  });
+  if (process.env.NODE_ENV === 'development') {
+    app.enableCors({
+      origin: (origin, callback) => {
+        callback(null, true); // accept all origins in dev
+      },
+      credentials: true,
+    });
+  } else {
+    app.enableCors({
+      origin: `http://localhost:${port}`, // 👈 your Swagger UI origin
+      credentials: true, // 👈 this allows cookies
+    });
+  }
+  
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // strips unknown props
