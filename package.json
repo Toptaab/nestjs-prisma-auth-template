@@ -1,9 +1,9 @@
 {
-  "name": "javindeseoul-api",
-  "version": "0.0.1",
+  "name": "nestjs-prisma-auth-template",
+  "version": "0.1.0",
   "description": "",
-  "author": "",
-  "private": true,
+  "author": "Surapat Sab-aram",
+  "private": false,
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
