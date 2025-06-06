@@ -20,6 +20,7 @@ export class LoggerMiddleware implements NestMiddleware {
 
     res.on('finish', () => {
       const duration = Date.now() - start;
+      const parsed = tryParse(responseBody);
       const log = {
         timestamp: new Date().toISOString(),
         method,
@@ -29,10 +30,15 @@ export class LoggerMiddleware implements NestMiddleware {
         statusCode: res.statusCode,
         durationMs: `${(duration / 1000).toFixed(2)} Second`,
         requestBody: maskSensitive(body),
-        responseBody: tryParse(responseBody),
+        responseBody: {
+          ...parsed,
+          data: Array.isArray(parsed?.data)
+            ? parsed.data.slice(0, 10)
+            : parsed.data,
+        },
       };
 
-      console.log(log);
+      console.log(JSON.stringify(log, null, 2));
     });
 
     next();
