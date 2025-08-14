@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Request, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
-import { loginBodyDto, loginResponseDto } from './dto/login.dto';
-import { validateDto } from './dto/validate.dto';
+import { LoginBodyDto, LoginResponseDto } from './dto/login.dto';
+import { ValidateDto } from './dto/validate.dto';
 import { Response } from 'express';
 import { GoogleAuthGuard } from './google-auth.guard';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -22,11 +22,11 @@ export class AuthController {
   @Post('/login')
   @ApiOperation({ summary: 'login' })
   @ApiResponse({ status: 200, description: 'login successfully.' })
-  @ApiBody({ type: loginBodyDto })
+  @ApiBody({ type: LoginBodyDto })
   async login(
-    @Request() req: { user: validateDto },
+    @Request() req: { user: ValidateDto },
     @Res({ passthrough: true }) response: Response,
-  ): Promise<loginResponseDto> {
+  ): Promise<LoginResponseDto> {
     const { accessToken } = await this.authService.login(req.user);
     // save to cookie
     response.cookie('access_token', accessToken);
@@ -39,7 +39,7 @@ export class AuthController {
   @ApiOperation({ summary: 'google sign in' })
   @ApiResponse({ status: 200, description: 'sign in successfully.' })
   @Get('/google')
-  googleAuth(@Request() req: { user: validateDto }): unknown {
+  googleAuth(@Request() req: { user: ValidateDto }): unknown {
     return;
   }
 

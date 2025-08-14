@@ -11,8 +11,8 @@ import {
 import { RegisterDto } from './dto/register.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UsersModel } from './model/users.model';
-import { jwtDto } from '../auth/dto/jwt.dto';
-import { profileDto } from './dto/profile.dto';
+import { JwtDto } from '../auth/dto/jwt.dto';
+import { ProfileDto } from './dto/profile.dto';
 import { UpdateUsersDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -34,12 +34,12 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: 'update user user profile successfully.',
-    type: profileDto,
+    type: ProfileDto,
   })
   async update(
-    @Request() req: { user: jwtDto },
+    @Request() req: { user: JwtDto },
     @Body() updateUser: UpdateUsersDto,
-  ): Promise<profileDto> {
+  ): Promise<ProfileDto> {
     const user = await this.userService.update(req.user.userId, updateUser);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, googleId, ...response } = user;
@@ -64,9 +64,9 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: 'get user profile successfully.',
-    type: profileDto,
+    type: ProfileDto,
   })
-  async getProfile(@Request() req: { user: jwtDto }): Promise<profileDto> {
+  async getProfile(@Request() req: { user: JwtDto }): Promise<ProfileDto> {
     const user = await this.userService.findByEmail(req.user.email);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, googleId, ...response } = user;

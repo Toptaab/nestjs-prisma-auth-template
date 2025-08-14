@@ -1,9 +1,9 @@
-export class jwtDto {
+export class JwtDto {
   email: string;
   userId: number;
 }
 
-export class payloadDto {
+export class PayloadDto {
   email: string;
   sub: number;
 }

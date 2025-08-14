@@ -2,7 +2,7 @@ import { OmitType } from '@nestjs/mapped-types';
 import { UsersModel } from '../model/users.model';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class profileDto extends OmitType(UsersModel, [
+export class ProfileDto extends OmitType(UsersModel, [
   'password',
   'googleId',
 ] as const) {
