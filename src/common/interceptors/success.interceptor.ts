@@ -16,7 +16,7 @@ export class SuccessInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((data) => ({
         statusCode: response.statusCode,
-        apiCode: request.apiCode || 'SUCCESS',
+        code: request.code || 'SUCCESS',
         message: request.apiMessage || 'Success',
         timestamp: new Date().toISOString(),
         data,

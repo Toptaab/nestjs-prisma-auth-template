@@ -18,11 +18,7 @@ export class UsersService {
       where: { email: registerDto.email },
     });
     if (isExistedUser) {
-      throw new AppException(
-        ErrorCode.EMAIL_ALREADY_EXISTS,
-        ErrorMessage.EMAIL_ALREADY_EXISTS,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new AppException(ErrorCode.USER_ALREADY_EXISTS);
     }
     return this.prisma.user.create({
       data: {
@@ -38,11 +34,7 @@ export class UsersService {
   async findByEmail(email: string): Promise<UsersModel> {
     const user = await this.prisma.user.findFirst({ where: { email } });
     if (!user) {
-      throw new AppException(
-        ErrorCode.USER_NOT_FOUND,
-        ErrorMessage.USER_NOT_FOUND,
-        HttpStatus.NOT_FOUND,
-      );
+      throw new AppException(ErrorCode.USER_NOT_FOUND);
     }
 
     return user;
@@ -53,11 +45,7 @@ export class UsersService {
       where: { id: id },
     });
     if (!isExistedUser) {
-      throw new AppException(
-        ErrorCode.USER_NOT_FOUND,
-        ErrorMessage.USER_NOT_FOUND,
-        HttpStatus.NOT_FOUND,
-      );
+      throw new AppException(ErrorCode.USER_NOT_FOUND);
     }
     return this.prisma.user.update({
       where: { id },
