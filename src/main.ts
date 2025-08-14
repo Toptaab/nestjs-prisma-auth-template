@@ -6,6 +6,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { AppExceptionFilter } from './common/filters/app-exception.filter';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
+import { SuccessInterceptor } from './common/interceptors/success.interceptor';
 
 // Load env file based on NODE_ENV
 dotenv.config({
@@ -44,6 +45,7 @@ async function bootstrap() {
     }),
   );
   app.useGlobalFilters(new AppExceptionFilter());
+    app.useGlobalInterceptors(new SuccessInterceptor());
   app.use(cookieParser());
 
   setupSwagger(app); // Swagger setup
