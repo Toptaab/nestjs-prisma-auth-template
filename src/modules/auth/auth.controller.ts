@@ -10,6 +10,7 @@ import {
   BadExceptionErrorResponseDto,
   BadGatewayErrorResponseDto,
 } from 'src/common/errors/error-response.dto';
+import { FacebookAuthGuard } from './facebook-auth.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -56,6 +57,31 @@ export class AuthController {
     response.cookie('access_token', accessToken);
     return {
       message: 'Login successful',
+    };
+  }
+
+  @UseGuards(FacebookAuthGuard)
+  @ApiOperation({ summary: 'facebook sign in' })
+  @ApiResponse({ status: 200, description: 'sign in successfully.' })
+  @Get('/facebook')
+  facebookAuth(@Request() req: { user: ValidateDto }): unknown {
+    return;
+  }
+
+  @UseGuards(FacebookAuthGuard)
+  @Get('/facebook/callback')
+  @ApiOperation({ summary: 'facebook sign in call back' })
+  @ApiResponse({ status: 200, description: 'sign in successfully.' })
+  async facebookAuthRedirect(
+    @Request() req,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const { accessToken } = await this.authService.facebookLogin(req);
+    // save to cookie
+    response.cookie('access_token', accessToken);
+    return {
+      message: 'Login successful',
+      accessToken: accessToken,
     };
   }
 }

@@ -58,6 +58,42 @@ export class AuthService {
       user = await this.usersService.update(user.id, {
         ...user,
         googleId: googleId,
+        facebookId: user?.facebookId || undefined,
+      });
+    }
+
+    const payload = { email: user.email, id: user.id };
+
+    return {
+      accessToken: await this.jwtService.signAsync(payload),
+    };
+  }
+
+  async facebookLogin(req: {
+    user?: {
+      facebookId?: string;
+      email?: string;
+      name?: string;
+    };
+  }): Promise<LoginDto> {
+    if (!req.user) {
+      throw new Error('Facebook login failed: No user information received');
+    }
+
+    const { email, facebookId } = req.user;
+    let user = await this.usersService.findByEmail(email as string);
+
+    if (!user) {
+      user = await this.usersService.create({
+        email: email as string,
+        facebookId: facebookId,
+      });
+    }
+    if (user && !user.facebookId) {
+      user = await this.usersService.update(user.id, {
+        ...user,
+        facebookId: facebookId,
+        googleId: user?.googleId || undefined,
       });
     }
 

@@ -15,12 +15,13 @@ datasource db {
 
 //  =========================================== MASTER DATA ===========================================
 model User {
-  id                Int     @id @default(autoincrement())
-  email             String  @unique @db.VarChar(255)
-  googleId          String? @unique @db.VarChar(255)
-  password          String? @db.VarChar(60)
-  isActive          Boolean @default(true)
-  
+  id         Int     @id @default(autoincrement())
+  email      String  @unique @db.VarChar(255)
+  googleId   String? @unique @db.VarChar(255)
+  facebookId String? @unique @db.VarChar(255)
+  password   String? @db.VarChar(60)
+  isActive   Boolean @default(true)
+
   createdAt DateTime @default(now()) @db.DateTime(0)
   createdBy Int      @db.Int()
 

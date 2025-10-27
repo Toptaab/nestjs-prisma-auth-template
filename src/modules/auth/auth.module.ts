@@ -9,10 +9,17 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { UsersModule } from '../users/users.module';
+import { FacebookStrategy } from './strategies/facebook.strategy';
 
 @Module({
   imports: [UsersModule, CommonModule, PassportModule, ConfigModule],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, GoogleStrategy],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    GoogleStrategy,
+    FacebookStrategy,
+  ],
 })
 export class AuthModule {}

@@ -16,6 +16,13 @@ export class UsersModel implements User {
   })
   googleId: string | null;
 
+  @ApiProperty({
+    type: String,
+    description: 'UNIQUE ID of facebook',
+    required: false,
+  })
+  facebookId: string | null;
+
   @ApiProperty({ type: String, description: 'email', required: true })
   email: string;
 
