@@ -1,6 +1,6 @@
-export class JwtDto {
+export class PayloadDto {
   id: number;
   email: string;
 }
 
-export class RequestUserDto extends JwtDto { }
+export class RequestUserDto extends PayloadDto { }
