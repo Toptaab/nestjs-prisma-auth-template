@@ -34,12 +34,31 @@ class EnvironmentVariablesDto {
 
   @IsNotEmpty()
   @IsString()
-  DATABASE_URL: string;
+  DB_HOST: string
+
+  @IsNotEmpty()
+  @IsNumber()
+  DB_PORT: number
+
+  @IsNotEmpty()
+  @IsString()
+  DB_USER: string
+
+  @IsNotEmpty()
+  @IsString()
+  DB_PASSWORD: string
+
+  @IsNotEmpty()
+  @IsString()
+  DB_NAME: string
+
+  @IsNotEmpty()
+  @IsNumber()
+  DB_CONN_LIMIT: number
 
   @IsNotEmpty()
   @IsString()
   CORS_ORIGIN: string;
-
 
   @IsOptional()
   @IsString()
