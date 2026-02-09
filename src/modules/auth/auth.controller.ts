@@ -11,13 +11,15 @@ import {
   BadGatewayErrorResponseDto,
 } from 'src/common/errors/error-response.dto';
 import { FacebookAuthGuard } from './facebook-auth.guard';
+import { ConfigService } from '@nestjs/config';
+import { Environment } from 'src/env/env.validation';
 
 @ApiTags('auth')
 @Controller('auth')
 @ApiResponse({ status: 400, type: BadExceptionErrorResponseDto })
 @ApiResponse({ status: 500, type: BadGatewayErrorResponseDto })
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService, private readonly config: ConfigService) { }
 
   @UseGuards(LocalAuthGuard)
   @Post('/login')
@@ -29,8 +31,14 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ): Promise<LoginResponseDto> {
     const { accessToken } = await this.authService.login(req.user);
+
     // save to cookie
-    response.cookie('access_token', accessToken);
+    response.cookie('access_token', accessToken, {
+      secure: this.config.get("env") === Environment.Production ? true : false,
+      sameSite: 'lax',
+      path: '/',
+    });
+
     return {
       message: 'Login successful',
     };
@@ -54,7 +62,11 @@ export class AuthController {
   ) {
     const { accessToken } = await this.authService.googleLogin(req);
     // save to cookie
-    response.cookie('access_token', accessToken);
+    response.cookie('access_token', accessToken, {
+      secure: this.config.get("env") === Environment.Production ? true : false,
+      sameSite: 'lax',
+      path: '/',
+    });
     return {
       message: 'Login successful',
     };
@@ -78,7 +90,11 @@ export class AuthController {
   ) {
     const { accessToken } = await this.authService.facebookLogin(req);
     // save to cookie
-    response.cookie('access_token', accessToken);
+    response.cookie('access_token', accessToken, {
+      secure: this.config.get("env") === Environment.Production ? true : false,
+      sameSite: 'lax',
+      path: '/',
+    });
     return {
       message: 'Login successful',
       accessToken: accessToken,

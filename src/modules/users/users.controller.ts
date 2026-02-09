@@ -3,15 +3,13 @@ import {
   Post,
   Body,
   Get,
-  UseGuards,
   Request,
   Patch,
 } from '@nestjs/common';
 
 import { RegisterDto } from './dto/register.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UsersModel } from './model/users.model';
-import { JwtDto } from '../auth/dto/jwt.dto';
+import {  RequestUserDto } from '../auth/dto/jwt.dto';
 import { ProfileDto } from './dto/profile.dto';
 import { UpdateUsersDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
@@ -20,15 +18,17 @@ import {
   BadExceptionErrorResponseDto,
   BadGatewayErrorResponseDto,
 } from 'src/common/errors/error-response.dto';
+import { Auth } from '../auth/decorators/auth.decorator';
+
 
 @ApiTags('users')
 @Controller('users')
 @ApiResponse({ status: 400, type: BadExceptionErrorResponseDto })
 @ApiResponse({ status: 500, type: BadGatewayErrorResponseDto })
 export class UsersController {
-  constructor(private readonly userService: UsersService) {}
+  constructor(private readonly userService: UsersService) { }
 
-  @UseGuards(JwtAuthGuard)
+  @Auth()
   @Patch('/')
   @ApiOperation({ summary: 'update user profile' })
   @ApiResponse({
@@ -37,10 +37,10 @@ export class UsersController {
     type: ProfileDto,
   })
   async update(
-    @Request() req: { user: JwtDto },
+    @Request() req: { user: RequestUserDto },
     @Body() updateUser: UpdateUsersDto,
   ): Promise<ProfileDto> {
-    const user = await this.userService.update(req.user.userId, updateUser);
+    const user = await this.userService.update(req.user.id, updateUser);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, googleId, ...response } = user;
     return response;
@@ -58,7 +58,7 @@ export class UsersController {
     return newUser;
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Auth()
   @Get('/profile')
   @ApiOperation({ summary: 'get user profile' })
   @ApiResponse({
@@ -66,7 +66,7 @@ export class UsersController {
     description: 'get user profile successfully.',
     type: ProfileDto,
   })
-  async getProfile(@Request() req: { user: JwtDto }): Promise<ProfileDto> {
+  async getProfile(@Request() req: { user: RequestUserDto }): Promise<ProfileDto> {
     const user = await this.userService.findByEmail(req.user.email);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, googleId, ...response } = user;

@@ -1,9 +1,6 @@
 export class JwtDto {
+  id: number;
   email: string;
-  userId: number;
 }
 
-export class PayloadDto {
-  email: string;
-  sub: number;
-}
+export class RequestUserDto extends JwtDto { }

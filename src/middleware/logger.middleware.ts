@@ -33,7 +33,7 @@ export class LoggerMiddleware implements NestMiddleware {
         responseBody: {
           ...parsed,
           data: Array.isArray(parsed?.data)
-            ? parsed.data.slice(0, 10)
+            ? parsed.data.slice(0, 2)
             : parsed.data,
         },
       };
