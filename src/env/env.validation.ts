@@ -52,7 +52,7 @@ class EnvironmentVariablesDto {
   @IsString()
   DB_NAME: string
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   DB_CONN_LIMIT: number
 
