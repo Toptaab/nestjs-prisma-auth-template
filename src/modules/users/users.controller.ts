@@ -9,7 +9,7 @@ import {
 
 import { RegisterDto } from './dto/register.dto';
 import { UsersModel } from './model/users.model';
-import {  RequestUserDto } from '../auth/dto/jwt.dto';
+import { RequestUserDto } from '../auth/dto/jwt.dto';
 import { ProfileDto } from './dto/profile.dto';
 import { UpdateUsersDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
@@ -19,6 +19,7 @@ import {
   BadGatewayErrorResponseDto,
 } from 'src/common/errors/error-response.dto';
 import { Auth } from '../auth/decorators/auth.decorator';
+import { ApiSuccessResponse } from 'src/common/decorators/swagger-ok-response.decorator';
 
 
 @ApiTags('users')
@@ -31,11 +32,7 @@ export class UsersController {
   @Auth()
   @Patch('/')
   @ApiOperation({ summary: 'update user profile' })
-  @ApiResponse({
-    status: 200,
-    description: 'update user user profile successfully.',
-    type: ProfileDto,
-  })
+  @ApiSuccessResponse(ProfileDto)
   async update(
     @Request() req: { user: RequestUserDto },
     @Body() updateUser: UpdateUsersDto,
@@ -48,11 +45,7 @@ export class UsersController {
 
   @Post('/register')
   @ApiOperation({ summary: 'register' })
-  @ApiResponse({
-    status: 200,
-    description: 'register successfully.',
-    type: UsersModel,
-  })
+  @ApiSuccessResponse(UsersModel)
   async create(@Body() registerUser: RegisterDto): Promise<UsersModel> {
     const newUser = await this.userService.create(registerUser);
     return newUser;
@@ -61,11 +54,7 @@ export class UsersController {
   @Auth()
   @Get('/profile')
   @ApiOperation({ summary: 'get user profile' })
-  @ApiResponse({
-    status: 200,
-    description: 'get user profile successfully.',
-    type: ProfileDto,
-  })
+  @ApiSuccessResponse(ProfileDto)
   async getProfile(@Request() req: { user: RequestUserDto }): Promise<ProfileDto> {
     const user = await this.userService.findByEmail(req.user.email);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { UsersModel } from './model/users.model.js';
 import { PrismaService } from '../../prisma/prisma.service.js';
@@ -12,7 +12,7 @@ export class UsersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly hashService: HashService,
-  ) {}
+  ) { }
   async create(registerDto: RegisterDto): Promise<UsersModel> {
     const isExistedUser = await this.prisma.user.findFirst({
       where: { email: registerDto.email },

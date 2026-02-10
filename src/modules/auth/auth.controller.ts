@@ -13,6 +13,7 @@ import {
 import { FacebookAuthGuard } from './facebook-auth.guard';
 import { ConfigService } from '@nestjs/config';
 import { Environment } from 'src/env/env.validation';
+import { ApiSuccessResponse } from 'src/common/decorators/swagger-ok-response.decorator';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -24,7 +25,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('/login')
   @ApiOperation({ summary: 'login' })
-  @ApiResponse({ status: 200, description: 'login successfully.' })
+  @ApiSuccessResponse(LoginBodyDto)
   @ApiBody({ type: LoginBodyDto })
   async login(
     @Request() req: { user: ValidateDto },
@@ -41,6 +42,7 @@ export class AuthController {
 
     return {
       message: 'Login successful',
+      accessToken
     };
   }
 
@@ -55,11 +57,11 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   @Get('/google/callback')
   @ApiOperation({ summary: 'google sign in call back' })
-  @ApiResponse({ status: 200, description: 'sign in successfully.' })
+  @ApiSuccessResponse(LoginBodyDto)
   async googleAuthRedirect(
     @Request() req,
     @Res({ passthrough: true }) response: Response,
-  ) {
+  ): Promise<LoginResponseDto> {
     const { accessToken } = await this.authService.googleLogin(req);
     // save to cookie
     response.cookie('access_token', accessToken, {
@@ -69,6 +71,7 @@ export class AuthController {
     });
     return {
       message: 'Login successful',
+      accessToken
     };
   }
 
@@ -84,10 +87,11 @@ export class AuthController {
   @Get('/facebook/callback')
   @ApiOperation({ summary: 'facebook sign in call back' })
   @ApiResponse({ status: 200, description: 'sign in successfully.' })
+  @ApiSuccessResponse(LoginBodyDto)
   async facebookAuthRedirect(
     @Request() req,
     @Res({ passthrough: true }) response: Response,
-  ) {
+  ): Promise<LoginResponseDto> {
     const { accessToken } = await this.authService.facebookLogin(req);
     // save to cookie
     response.cookie('access_token', accessToken, {
@@ -97,7 +101,7 @@ export class AuthController {
     });
     return {
       message: 'Login successful',
-      accessToken: accessToken,
+      accessToken,
     };
   }
 }

@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { HashService } from 'src/common/utils/hash.service';
 import { UsersService } from '../users/users.service';
 import { ValidateDto } from './dto/validate.dto';
-import { LoginDto } from './dto/login.dto';
 import { JwtService } from 'src/common/utils/jwt.service';
+import { LoginSuccess } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -26,7 +26,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: ValidateDto): Promise<LoginDto> {
+  async login(user: ValidateDto): Promise<LoginSuccess> {
     const payload = { email: user.email, id: user.id };
     return {
       accessToken: await this.jwtService.signAsync(payload),
@@ -40,7 +40,7 @@ export class AuthService {
       picture?: string;
       googleId?: string;
     };
-  }): Promise<LoginDto> {
+  }): Promise<LoginSuccess> {
     if (!req.user) {
       throw new Error('Google login failed: No user information received');
     }
@@ -75,7 +75,7 @@ export class AuthService {
       email?: string;
       name?: string;
     };
-  }): Promise<LoginDto> {
+  }): Promise<LoginSuccess> {
     if (!req.user) {
       throw new Error('Facebook login failed: No user information received');
     }

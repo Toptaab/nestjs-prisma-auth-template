@@ -8,10 +8,11 @@ export class LoginBodyDto {
   password: string;
 }
 
-export class LoginDto {
-  accessToken: string;
+export class LoginSuccess {
+  accessToken: string
 }
 
 export class LoginResponseDto {
   message: string;
+  accessToken: string
 }
